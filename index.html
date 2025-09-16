@@ -24,24 +24,26 @@
         </div>
         <div class="form-group">
           <label for="phone">Teléfono</label>
-          <input type="tel" id="phone" required/>
+          <input type="tel" id="phone" placeholder="34123456789" required/>
         </div>
         <div class="form-group">
           <label for="templateSelect">Plantilla</label>
-          <select id="templateSelect">
-            <!-- Opciones dinámicas -->
+          <select id="templateSelect" required>
+            <option value="">-- Selecciona --</option>
           </select>
         </div>
         <div class="form-group">
           <label for="offer">Oferta Relacionada</label>
-          <input type="text" id="offer"/>
+          <input type="text" id="offer" placeholder="Ej. 20% de descuento"/>
         </div>
         <div class="form-group">
           <label for="extraMsg">Mensaje Opcional</label>
           <textarea id="extraMsg" rows="3"></textarea>
         </div>
-        <button type="button" id="previewBtn">Previsualizar</button>
-        <button type="submit">Enviar</button>
+        <div class="actions">
+          <button type="button" id="previewBtn">Previsualizar</button>
+          <button type="submit" id="sendBtn">Enviar</button>
+        </div>
       </form>
       <div id="previewBox" class="preview hidden">
         <h3>Previsualización:</h3>
@@ -63,12 +65,9 @@
         </div>
         <button type="submit">Guardar Plantilla</button>
       </form>
-      <ul id="templateList" class="template-list">
-        <!-- Listado dinámico -->
-      </ul>
+      <ul id="templateList" class="template-list"></ul>
     </section>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>

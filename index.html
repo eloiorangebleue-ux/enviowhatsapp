@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WhatsApp Sender</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="styles.css"/>
@@ -15,70 +15,72 @@
 
   <main class="container">
     <nav class="tabs">
-      <button class="tab active" data-tab="send">Enviar</button>
-      <button class="tab" data-tab="templates">Plantillas</button>
+      <button class="tab active" data-tab="tab-send">Enviar</button>
+      <button class="tab" data-tab="tab-templates">Plantillas</button>
     </nav>
 
-    <!-- SECCIÓN ENVIAR -->
-    <section id="send" class="tab-content active">
-      <div class="card form-card">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="name">Nombre</label>
-            <input type="text" id="name" placeholder="Ej. Juan" required/>
+    <!-- TAB: Enviar WhatsApp -->
+    <section id="tab-send" class="tab-content active">
+      <div class="card send-card">
+        <form id="form-send">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="send-name">Nombre</label>
+              <input type="text" id="send-name" placeholder="Ej. Juan" required/>
+            </div>
+            <div class="form-group">
+              <label for="send-phone">Teléfono</label>
+              <input type="tel" id="send-phone" placeholder="34123456789" required/>
+            </div>
+            <div class="form-group">
+              <label for="send-template">Plantilla</label>
+              <select id="send-template" required>
+                <option value="">-- Selecciona --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="send-offer">Oferta</label>
+              <input type="text" id="send-offer" placeholder="20% descuento"/>
+            </div>
+            <div class="form-group full">
+              <label for="send-extra">Mensaje Opcional</label>
+              <textarea id="send-extra" rows="2"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="phone">Teléfono</label>
-            <input type="tel" id="phone" placeholder="34123456789" required/>
-          </div>
-          <div class="form-group">
-            <label for="templateSelect">Plantilla</label>
-            <select id="templateSelect" required>
-              <option value="">-- Selecciona --</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="offer">Oferta</label>
-            <input type="text" id="offer" placeholder="20% descuento"/>
-          </div>
-          <div class="form-group full">
-            <label for="extraMsg">Mensaje Opcional</label>
-            <textarea id="extraMsg" rows="2"></textarea>
-          </div>
-        </div>
-        <button type="button" id="sendBtn">Enviar a WhatsApp</button>
+          <button type="button" id="btn-send">Enviar a WhatsApp</button>
+        </form>
       </div>
 
       <div class="card preview-card">
         <h2>Previsualización</h2>
-        <div id="previewContent" class="preview-content">
+        <div class="preview-content">
           <img src="whatsapp-icon.svg" alt="WhatsApp" class="icon"/>
           <div class="message">
-            <p class="msg-text">Hola…, selecciona una plantilla</p>
+            <p id="preview-text">Hola…, selecciona una plantilla</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECCIÓN PLANTILLAS -->
-    <section id="templates" class="tab-content">
-      <div class="card form-card">
+    <!-- TAB: Gestión de Plantillas -->
+    <section id="tab-templates" class="tab-content">
+      <div class="card template-form-card">
         <h2>Crear / Editar Plantilla</h2>
-        <form id="templateForm">
+        <form id="form-templates">
           <div class="form-group">
-            <label for="tplName">Nombre de Plantilla</label>
-            <input type="text" id="tplName" required/>
+            <label for="tpl-name">Nombre de Plantilla</label>
+            <input type="text" id="tpl-name" required/>
           </div>
           <div class="form-group">
-            <label for="tplText">Texto de Plantilla</label>
-            <textarea id="tplText" rows="3" required></textarea>
+            <label for="tpl-text">Texto de Plantilla</label>
+            <textarea id="tpl-text" rows="3" required></textarea>
           </div>
-          <button type="submit" id="saveTplBtn">Guardar Plantilla</button>
+          <button type="submit" id="btn-save-tpl">Guardar Plantilla</button>
         </form>
       </div>
-      <div class="card list-card">
+      <div class="card template-list-card">
         <h2>Plantillas Disponibles</h2>
-        <ul id="templateList"></ul>
+        <ul id="tpl-list"></ul>
       </div>
     </section>
   </main>

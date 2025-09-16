@@ -8,66 +8,77 @@
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <div class="container">
+  <header class="app-header">
+    <img src="whatsapp-logo.svg" alt="WhatsApp" class="logo"/>
+    <h1>WhatsApp Sender</h1>
+  </header>
+
+  <main class="container">
     <nav class="tabs">
-      <button class="tab active" data-tab="send">Enviar Mensaje</button>
+      <button class="tab active" data-tab="send">Enviar</button>
       <button class="tab" data-tab="templates">Plantillas</button>
     </nav>
 
-    <!-- Pestaña: Envío de Mensajes -->
     <section id="send" class="tab-content active">
-      <h2>Enviar WhatsApp</h2>
-      <form id="sendForm">
-        <div class="form-group">
-          <label for="name">Nombre</label>
-          <input type="text" id="name" required/>
+      <div class="card form-card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" placeholder="Ej. Juan" required/>
+          </div>
+          <div class="form-group">
+            <label for="phone">Teléfono</label>
+            <input type="tel" id="phone" placeholder="34123456789" required/>
+          </div>
+          <div class="form-group">
+            <label for="templateSelect">Plantilla</label>
+            <select id="templateSelect" required>
+              <option value="">-- Selecciona --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="offer">Oferta</label>
+            <input type="text" id="offer" placeholder="20% descuento"/>
+          </div>
+          <div class="form-group full">
+            <label for="extraMsg">Mensaje Opcional</label>
+            <textarea id="extraMsg" rows="2"></textarea>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="phone">Teléfono</label>
-          <input type="tel" id="phone" placeholder="34123456789" required/>
+        <button type="submit" id="sendBtn">Enviar a WhatsApp</button>
+      </div>
+
+      <div class="card preview-card">
+        <h2>Previsualización</h2>
+        <div id="previewContent" class="preview-content">
+          <img src="whatsapp-icon.svg" alt="WhatsApp" class="icon"/>
+          <div class="message">
+            <p class="msg-text">Hola…, selecciona una plantilla</p>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="templateSelect">Plantilla</label>
-          <select id="templateSelect" required>
-            <option value="">-- Selecciona --</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="offer">Oferta Relacionada</label>
-          <input type="text" id="offer" placeholder="Ej. 20% de descuento"/>
-        </div>
-        <div class="form-group">
-          <label for="extraMsg">Mensaje Opcional</label>
-          <textarea id="extraMsg" rows="3"></textarea>
-        </div>
-        <div class="actions">
-          <button type="button" id="previewBtn">Previsualizar</button>
-          <button type="submit" id="sendBtn">Enviar</button>
-        </div>
-      </form>
-      <div id="previewBox" class="preview hidden">
-        <h3>Previsualización:</h3>
-        <div id="previewContent"></div>
       </div>
     </section>
 
-    <!-- Pestaña: Gestión de Plantillas -->
     <section id="templates" class="tab-content">
-      <h2>Plantillas</h2>
-      <form id="templateForm">
+      <div class="card form-card">
+        <h2>Crear / Editar Plantilla</h2>
         <div class="form-group">
-          <label for="tplName">Nombre de Plantilla</label>
+          <label for="tplName">Nombre</label>
           <input type="text" id="tplName" required/>
         </div>
         <div class="form-group">
-          <label for="tplText">Texto de Plantilla</label>
-          <textarea id="tplText" rows="4" required></textarea>
+          <label for="tplText">Texto</label>
+          <textarea id="tplText" rows="3" required></textarea>
         </div>
-        <button type="submit">Guardar Plantilla</button>
-      </form>
-      <ul id="templateList" class="template-list"></ul>
+        <button id="saveTplBtn">Guardar</button>
+      </div>
+      <div class="card list-card">
+        <h2>Plantillas Disponibles</h2>
+        <ul id="templateList"></ul>
+      </div>
     </section>
-  </div>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>

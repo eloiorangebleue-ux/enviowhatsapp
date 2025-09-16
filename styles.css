@@ -1,80 +1,86 @@
-/* Fuentes y reset */
+/* Reset y Tipografía */
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
   font-family: 'Poppins', sans-serif;
-  background: #f5f7fa;
+  background: #ECE5DD;
   color: #333;
   display: flex; justify-content: center; align-items: start;
   min-height: 100vh; padding: 2rem;
 }
 
-/* Contenedor y pestañas */
+/* Contenedor */
 .container {
   background: #fff;
-  border-radius: 8px;
+  border-radius: 12px;
   width: 100%; max-width: 600px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   overflow: hidden;
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.6s ease-out;
 }
+
+/* Pestañas */
 .tabs {
   display: flex;
-  background: #2d8cff;
+  background: #25D366;
 }
 .tabs .tab {
   flex:1; padding:1rem; text-align:center;
   color: #fff; cursor:pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
-.tabs .tab.active, .tabs .tab:hover {
-  background: #1c6ed1;
-}
+.tabs .tab:hover { background: #1DA851; transform: translateY(-2px); }
+.tabs .tab.active { background: #1DA851; }
 
-/* Contenido de pestañas */
+/* Contenido Pestañas */
 .tab-content { padding:1.5rem; display:none; animation: slideIn 0.4s ease-out; }
 .tab-content.active { display:block; }
 
 /* Formularios */
-.form-group { margin-bottom:1rem; }
+.form-group { margin-bottom:1rem; position: relative; }
 .form-group label { display:block; margin-bottom:0.3rem; font-weight:500; }
 .form-group input,
 .form-group select,
 .form-group textarea {
-  width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px;
-  transition: border-color 0.3s;
+  width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:6px;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 .form-group input:focus,
 .form-group select:focus,
-.form-group textarea:focus { border-color:#2d8cff; outline:none; }
-
-button {
-  background:#2d8cff; color:#fff; border:none; padding:0.7rem 1.2rem;
-  border-radius:4px; cursor:pointer; font-weight:500;
-  transition: background 0.3s;
+.form-group textarea:focus {
+  border-color:#25D366; box-shadow: 0 0 6px rgba(37,211,102,0.3); outline:none;
 }
-button:hover { background:#1c6ed1; }
+
+/* Botones */
+.actions { display: flex; gap:1rem; }
+button {
+  background:#25D366; color:#fff; border:none; padding:0.8rem 1.2rem;
+  border-radius:6px; cursor:pointer; font-weight:600;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover { background:#1DA851; transform: translateY(-1px); }
+button:active { transform: translateY(0); }
 
 /* Previsualización */
 .preview {
-  margin-top:1.5rem; padding:1rem; background:#f0f4ff; border-radius:4px;
+  margin-top:1.5rem; padding:1rem; background:#F0FFF4;
+  border-left:4px solid #25D366; border-radius:4px;
 }
 .hidden { display:none; }
 
-/* Lista de plantillas */
+/* Lista de Plantillas */
 .template-list { list-style:none; margin-top:1rem; }
 .template-list li {
   display:flex; justify-content:space-between; align-items:center;
-  padding:0.8rem; border-bottom:1px solid #eee;
-  animation: fadeInItem 0.3s ease-out;
+  padding:0.8rem; background:#FAFAFA; border-radius:6px;
+  margin-bottom:0.6rem; transition: background 0.3s;
 }
-.template-list li:last-child { border:none; }
+.template-list li:hover { background:#F1F1F1; }
 .template-list button {
-  background:transparent; color:#e74c3c; padding:0.3rem;
-  font-size:1rem;
+  background:transparent; color:#E74C3C; font-size:1.1rem;
+  transition: color 0.3s;
 }
-.template-list button:hover { color:#c0392b; }
+.template-list button:hover { color:#C0392B; }
 
 /* Animaciones */
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes slideIn { from { transform: translateY(10px); opacity:0; } to { transform: translateY(0); opacity:1; } }
-@keyframes fadeInItem { from{opacity:0;} to{opacity:1;} }

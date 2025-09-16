@@ -1,0 +1,80 @@
+/* Fuentes y reset */
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f5f7fa;
+  color: #333;
+  display: flex; justify-content: center; align-items: start;
+  min-height: 100vh; padding: 2rem;
+}
+
+/* Contenedor y pestañas */
+.container {
+  background: #fff;
+  border-radius: 8px;
+  width: 100%; max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-out;
+}
+.tabs {
+  display: flex;
+  background: #2d8cff;
+}
+.tabs .tab {
+  flex:1; padding:1rem; text-align:center;
+  color: #fff; cursor:pointer;
+  transition: background 0.3s;
+}
+.tabs .tab.active, .tabs .tab:hover {
+  background: #1c6ed1;
+}
+
+/* Contenido de pestañas */
+.tab-content { padding:1.5rem; display:none; animation: slideIn 0.4s ease-out; }
+.tab-content.active { display:block; }
+
+/* Formularios */
+.form-group { margin-bottom:1rem; }
+.form-group label { display:block; margin-bottom:0.3rem; font-weight:500; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px;
+  transition: border-color 0.3s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color:#2d8cff; outline:none; }
+
+button {
+  background:#2d8cff; color:#fff; border:none; padding:0.7rem 1.2rem;
+  border-radius:4px; cursor:pointer; font-weight:500;
+  transition: background 0.3s;
+}
+button:hover { background:#1c6ed1; }
+
+/* Previsualización */
+.preview {
+  margin-top:1.5rem; padding:1rem; background:#f0f4ff; border-radius:4px;
+}
+.hidden { display:none; }
+
+/* Lista de plantillas */
+.template-list { list-style:none; margin-top:1rem; }
+.template-list li {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0.8rem; border-bottom:1px solid #eee;
+  animation: fadeInItem 0.3s ease-out;
+}
+.template-list li:last-child { border:none; }
+.template-list button {
+  background:transparent; color:#e74c3c; padding:0.3rem;
+  font-size:1rem;
+}
+.template-list button:hover { color:#c0392b; }
+
+/* Animaciones */
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes slideIn { from { transform: translateY(10px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+@keyframes fadeInItem { from{opacity:0;} to{opacity:1;} }

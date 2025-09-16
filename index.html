@@ -4,93 +4,283 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Envío WhatsApp</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #333; }
-    header { background: #25D366; color: #fff; padding: 1rem; text-align: center; }
-    nav { display: flex; justify-content: center; background: #fff; }
-    nav button { flex: 1; padding: 0.75rem; border: none; background: #eee; cursor: pointer; font-weight: 600; }
-    nav button.active { background: #25D366; color: #fff; }
-    main { padding: 1rem; }
-    label { display: block; margin: 0.5rem 0 0.25rem; font-weight: 600; }
-    input, select, textarea { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-    button { margin-top: 1rem; padding: 0.75rem 1rem; border: none; border-radius: 4px; background: #25D366; color: #fff; cursor: pointer; font-weight: 600; }
-    .hidden { display: none; }
-    ul { list-style: none; padding: 0; }
-    li { background: #fff; margin: 0.5rem 0; padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
-    .actions button { margin-left: 0.5rem; background: #e33; border: none; color: white; border-radius: 4px; cursor: pointer; padding: 0 6px; }
-    .actions button.edit { background: #f0ad4e; }
+    /* Reset y base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f7fa;
+      color: #222;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    header {
+      background: #25D366;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.6rem;
+      letter-spacing: 0.05em;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #fff;
+      box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
+    }
+    nav button {
+      flex: 1;
+      padding: 1rem 0;
+      border: none;
+      background: #f0f2f5;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      letter-spacing: 0.03em;
+    }
+    nav button:hover, nav button.active {
+      background: #25D366;
+      color: #fff;
+      box-shadow: inset 0 -4px 0 #1ebe58;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem 3rem;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+
+    section {
+      display: block;
+    }
+
+    label {
+      display: block;
+      margin: 1rem 0 0.4rem;
+      font-weight: 600;
+      color: #444;
+      font-size: 0.95rem;
+      user-select: none;
+    }
+    input[type="text"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.65rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      resize: vertical;
+      font-family: 'Poppins', sans-serif;
+    }
+    input[type="text"]:focus,
+    input[type="tel"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #25D366;
+      outline: none;
+      box-shadow: 0 0 6px rgba(37,211,102,0.4);
+    }
+
+    button {
+      margin-top: 1.6rem;
+      background: #25D366;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 14px 0;
+      width: 100%;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background: #1ebe58;
+    }
+
+    #preview {
+      border: 1px solid #ddd;
+      background: #fafafa;
+      color: #333;
+      padding: 1rem;
+      margin-top: 0.7rem;
+      border-radius: 6px;
+      white-space: pre-line;
+      min-height: 5rem;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    p {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      user-select: none;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+    }
+    li {
+      background: #f7f9fa;
+      margin-bottom: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #222;
+      transition: background 0.2s;
+    }
+    li:hover {
+      background: #e6f4ea;
+    }
+
+    .actions button {
+      border: none;
+      color: white;
+      border-radius: 5px;
+      padding: 0.25rem 0.6rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    .actions button.edit {
+      background: #ffb74d;
+      margin-right: 0.4rem;
+    }
+    .actions button.edit:hover {
+      background: #f0a830;
+    }
+    .actions button.delete {
+      background: #e74c3c;
+    }
+    .actions button.delete:hover {
+      background: #c0392b;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      nav button {
+        font-size: 0.9rem;
+        padding: 0.9rem 0;
+      }
+      main {
+        margin: 1rem;
+        padding: 1rem;
+      }
+      label {
+        font-size: 0.9rem;
+      }
+      button {
+        font-size: 1rem;
+        padding: 12px 0;
+      }
+      #preview {
+        font-size: 0.95rem;
+      }
+      li {
+        font-size: 0.95rem;
+      }
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Envío WhatsApp</h1>
+  Envío WhatsApp
 </header>
 
-<nav>
-  <button id="tab-send" class="active">Enviar WhatsApp</button>
-  <button id="tab-config">Configurar Mensajes</button>
+<nav aria-label="Pestañas principales">
+  <button id="tab-send" class="active" aria-selected="true" role="tab" tabindex="0">Enviar WhatsApp</button>
+  <button id="tab-config" aria-selected="false" role="tab" tabindex="-1">Configurar Mensajes</button>
 </nav>
 
 <main>
-  <section id="section-send">
-    <label>Nombre completo
-      <input type="text" id="nombre" required />
-    </label>
-    <label>Número de teléfono
-      <input type="tel" id="telefono" required />
-    </label>
-    <label>Selecciona plantilla
-      <select id="plantilla-select">
-        <option value="">-- Nuevo mensaje --</option>
-      </select>
-    </label>
-    <label>Mensaje
-      <textarea id="mensaje" rows="4"></textarea>
-    </label>
-    <button id="btn-preview">Previsualizar mensaje</button>
+  <section id="section-send" role="tabpanel" aria-labelledby="tab-send">
+    <label for="nombre">Nombre completo</label>
+    <input type="text" id="nombre" name="nombre" autocomplete="name" required />
+
+    <label for="telefono">Número de teléfono</label>
+    <input type="tel" id="telefono" name="telefono" autocomplete="tel" required />
+
+    <label for="plantilla-select">Selecciona plantilla</label>
+    <select id="plantilla-select" name="plantilla-select" aria-describedby="plantilla-desc">
+      <option value="">-- Nuevo mensaje --</option>
+    </select>
+    <span id="plantilla-desc" class="sr-only">Elige una plantilla o escribe tu propio mensaje abajo</span>
+
+    <label for="mensaje">Mensaje</label>
+    <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe o selecciona un mensaje"></textarea>
+
+    <button id="btn-preview" type="button">Previsualizar mensaje</button>
 
     <h3>Previsualización:</h3>
-    <div id="preview">Completa los campos para ver la previsualización...</div>
+    <div id="preview" aria-live="polite" aria-atomic="true">Completa los campos para ver la previsualización...</div>
     <p>📱 El mensaje se enviará al número que introduzcas.</p>
   </section>
 
-  <section id="section-config" class="hidden">
-    <label>Nueva plantilla
-      <input type="text" id="new-plantilla" placeholder="Texto de la plantilla" />
-    </label>
-    <button id="btn-add">Añadir plantilla</button>
+  <section id="section-config" class="hidden" role="tabpanel" aria-labelledby="tab-config">
+    <label for="new-plantilla">Nueva plantilla</label>
+    <input type="text" id="new-plantilla" placeholder="Texto de la plantilla" />
+
+    <button id="btn-add" type="button">Añadir plantilla</button>
 
     <h3>Plantillas disponibles:</h3>
-    <ul id="lista-plantillas"></ul>
+    <ul id="lista-plantillas" aria-live="polite" aria-relevant="all"></ul>
   </section>
 </main>
 
 <script>
-  const API_KEY = 'MI_API_KEY_SECRETO'; // Ajusta igual a backend
+  const API_KEY = 'MI_API_KEY_SECRETO'; // Cambiar por tu clave secreta backend
 
-  // Tabs
+  // Tab UI Accessibility
   const tabSend = document.getElementById('tab-send');
   const tabConfig = document.getElementById('tab-config');
   const sectionSend = document.getElementById('section-send');
   const sectionConfig = document.getElementById('section-config');
 
-  tabSend.addEventListener('click', () => {
-    tabSend.classList.add('active');
-    tabConfig.classList.remove('active');
-    sectionSend.classList.remove('hidden');
-    sectionConfig.classList.add('hidden');
-  });
+  function activateTab(selectedTab, selectedPanel) {
+    [tabSend, tabConfig].forEach(tab => {
+      tab.classList.toggle('active', tab === selectedTab);
+      tab.setAttribute('aria-selected', tab === selectedTab ? 'true' : 'false');
+      tab.tabIndex = tab === selectedTab ? 0 : -1;
+    });
+    [sectionSend, sectionConfig].forEach(panel => {
+      panel.classList.toggle('hidden', panel !== selectedPanel);
+    });
+    selectedPanel.focus();
+  }
+
+  tabSend.addEventListener('click', () => activateTab(tabSend, sectionSend));
   tabConfig.addEventListener('click', () => {
-    tabConfig.classList.add('active');
-    tabSend.classList.remove('active');
-    sectionConfig.classList.remove('hidden');
-    sectionSend.classList.add('hidden');
+    activateTab(tabConfig, sectionConfig);
     renderLista();
   });
 
-  // Elementos form
+  // Elements
   const nombreEl = document.getElementById('nombre');
   const telefonoEl = document.getElementById('telefono');
   const plantillaSelect = document.getElementById('plantilla-select');
@@ -102,10 +292,9 @@
   const btnAdd = document.getElementById('btn-add');
   const listaPlantillasEl = document.getElementById('lista-plantillas');
 
-  // Variables
   let plantillas = [];
 
-  // Cargar plantillas desde GitHub
+  // Load plantillas raw JSON from GitHub
   async function fetchPlantillas() {
     try {
       const resp = await fetch('https://raw.githubusercontent.com/TU_USUARIO/TU_REPOSITORIO/main/plantillas.json');
@@ -120,7 +309,7 @@
     }
   }
 
-  // Guardar en backend/API
+  // Save plantillas via backend API
   async function savePlantillas() {
     try {
       const res = await fetch('http://localhost:3000/save-plantillas', {
@@ -133,7 +322,7 @@
       });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
-      alert('Guardado correcto.');
+      console.log('Guardado commit:', data.commit);
     } catch (e) {
       alert('Error guardando plantillas: ' + e.message);
     }
@@ -144,12 +333,14 @@
     plantillas.forEach((text, i) => {
       const li = document.createElement('li');
       li.textContent = text;
+
       const actions = document.createElement('div');
       actions.className = 'actions';
 
       const btnEdit = document.createElement('button');
       btnEdit.textContent = '✏️';
       btnEdit.className = 'edit';
+      btnEdit.title = 'Editar plantilla';
       btnEdit.onclick = () => {
         const nuevo = prompt('Editar plantilla:', text);
         if (nuevo !== null && nuevo.trim() !== '') {
@@ -162,6 +353,8 @@
 
       const btnDel = document.createElement('button');
       btnDel.textContent = '🗑️';
+      btnDel.className = 'delete';
+      btnDel.title = 'Eliminar plantilla';
       btnDel.onclick = () => {
         if (confirm('¿Eliminar plantilla?')) {
           plantillas.splice(i, 1);

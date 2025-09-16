@@ -2,121 +2,86 @@ document.addEventListener('DOMContentLoaded', () => {
   // Elementos
   const tabs = document.querySelectorAll('.tab');
   const contents = document.querySelectorAll('.tab-content');
+  const nameInput = document.getElementById('name');
+  const phoneInput = document.getElementById('phone');
   const templateSelect = document.getElementById('templateSelect');
-  const previewBtn = document.getElementById('previewBtn');
-  const previewBox = document.getElementById('previewBox');
-  const previewContent = document.getElementById('previewContent');
-  const sendForm = document.getElementById('sendForm');
+  const offerInput = document.getElementById('offer');
+  const extraInput = document.getElementById('extraMsg');
+  const previewText = document.querySelector('.msg-text');
   const sendBtn = document.getElementById('sendBtn');
-  const templateForm = document.getElementById('templateForm');
-  const templateList = document.getElementById('templateList');
+  const tplForm = document.getElementById('templateForm');
+  const tplName = document.getElementById('tplName');
+  const tplText = document.getElementById('tplText');
+  const tplList = document.getElementById('templateList');
 
-  // Plantillas por defecto
+  // Default Templates
   let templates = [
-    { name: 'ENJOY', text: 'ENJOY' },
-    { name: 'ENJOY ESTUDIANTE', text: 'ENJOY ESTUDIANTE' },
-    { name: 'FREE', text: 'FREE' },
-    { name: 'FREE ESTUDIANTE', text: 'FREE ESTUDIANTE' },
-    { name: 'FLEX', text: 'FLEX' },
-    { name: 'FLEX ESTUDIANTE', text: 'FLEX ESTUDIANTE' },
-    { name: 'BAJA', text: 'BAJA' },
-    { name: '2 SEMANAS', text: '2 SEMANAS' },
-    { name: 'MUSCULACIÓN', text: 'MUSCULACIÓN' },
-    { name: 'CLASES DIRIGIDAS', text: 'CLASES DIRIGIDAS' },
-    { name: 'SIN ASISTENCIA', text: 'SIN ASISTENCIA' },
-    { name: 'INFORMACION', text: 'INFORMACION' },
-    { name: 'ENTRENAMIENTO DE PRUEBA', text: 'ENTRENAMIENTO DE PRUEBA' },
-    { name: 'PREINSCRIPCIÓN', text: 'PREINSCRIPCIÓN' },
-    { name: 'DEUDA', text: 'DEUDA' },
-    { name: 'FORMULARIO NUTRICIÓN', text: 'FORMULARIO NUTRICIÓN' }
-  ];
+    'ENJOY','ENJOY ESTUDIANTE','FREE','FREE ESTUDIANTE','FLEX','FLEX ESTUDIANTE',
+    'BAJA','2 SEMANAS','MUSCULACIÓN','CLASES DIRIGIDAS','SIN ASISTENCIA',
+    'INFORMACION','ENTRENAMIENTO DE PRUEBA','PREINSCRIPCIÓN','DEUDA','FORMULARIO NUTRICIÓN'
+  ].map(t => ({ name:t, text:t }));
 
-  // Cambio de pestañas
+  // Tab Switching
   tabs.forEach(tab => tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    contents.forEach(c => c.classList.remove('active'));
+    tabs.forEach(t=>t.classList.remove('active'));
+    contents.forEach(c=>c.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById(tab.dataset.tab).classList.add('active');
   }));
 
-  // Actualizar opciones y lista
-  function updateTemplateOptions() {
+  // Render Options & List
+  function renderTemplates() {
     templateSelect.innerHTML = '<option value="">-- Selecciona --</option>';
-    templates.forEach((tpl, i) => {
+    tplList.innerHTML = '';
+    templates.forEach((tpl,i) => {
       templateSelect.innerHTML += `<option value="${i}">${tpl.name}</option>`;
-    });
-  }
-  function renderTemplateList() {
-    templateList.innerHTML = '';
-    templates.forEach((tpl, i) => {
-      templateList.innerHTML += `
+      tplList.innerHTML += `
         <li>
-          <span>${tpl.name}</span>
+          ${tpl.name}
           <div>
-            <button onclick="editTemplate(${i})">✎</button>
-            <button onclick="deleteTemplate(${i})">🗑️</button>
+            <button onclick="editTpl(${i})">✎</button>
+            <button onclick="delTpl(${i})">🗑️</button>
           </div>
         </li>`;
     });
   }
 
-  // CRUD Plantillas
-  templateForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const name = document.getElementById('tplName').value.trim();
-    const text = document.getElementById('tplText').value.trim();
-    if (name && text) {
-      templates.push({ name, text });
-      updateTemplateOptions(); renderTemplateList();
-      templateForm.reset();
-    }
-  });
-  window.deleteTemplate = index => {
-    templates.splice(index, 1);
-    updateTemplateOptions(); renderTemplateList();
-  };
-  window.editTemplate = index => {
-    const tpl = templates[index];
-    document.getElementById('tplName').value = tpl.name;
-    document.getElementById('tplText').value = tpl.text;
-    templates.splice(index, 1);
-    updateTemplateOptions(); renderTemplateList();
-  };
-
-  // Previsualización
-  previewBtn.addEventListener('click', () => {
-    const name = document.getElementById('name').value;
+  // Auto Preview
+  function updatePreview() {
+    const name = nameInput.value || '…';
     const idx = templateSelect.value;
-    const offer = document.getElementById('offer').value;
-    const extra = document.getElementById('extraMsg').value;
-    if (idx !== '') {
-      let msg = `Hola ${name}, ${templates[idx].text}`;
-      if (offer) msg += `\nOferta: ${offer}`;
-      if (extra) msg += `\n${extra}`;
-      previewContent.textContent = msg;
-      previewBox.classList.remove('hidden');
-    }
+    let msg = idx!=='' ? templates[idx].text : 'selecciona una plantilla';
+    if (offerInput.value) msg += `\nOferta: ${offerInput.value}`;
+    if (extraInput.value) msg += `\n${extraInput.value}`;
+    previewText.textContent = `Hola ${name}, ${msg}`;
+  }
+  [nameInput, templateSelect, offerInput, extraInput].forEach(el =>
+    el.addEventListener('input', updatePreview)
+  );
+
+  // Send WhatsApp
+  sendBtn.addEventListener('click', () => {
+    const phone = phoneInput.value.trim();
+    if (!phone) return alert('Introduce un número válido');
+    const text = encodeURIComponent(previewText.textContent);
+    window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${text}`, '_blank');
   });
 
-  // Envío a WhatsApp
-  sendForm.addEventListener('submit', e => {
+  // Template CRUD
+  window.delTpl = i => { templates.splice(i,1); renderTemplates(); updatePreview(); };
+  window.editTpl = i => {
+    tplName.value = templates[i].name;
+    tplText.value = templates[i].text;
+    templates.splice(i,1);
+    renderTemplates(); updatePreview();
+  };
+  tplForm.addEventListener('submit', e => {
     e.preventDefault();
-    const phone = document.getElementById('phone').value.trim();
-    if (!phone) return alert('Introduce un teléfono válido');
-    const text = encodeURIComponent(previewContent.textContent || '');
-    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${text}`;
-    sendBtn.textContent = 'Abriendo WhatsApp…';
-    sendBtn.disabled = true;
-    window.open(url, '_blank');
-    setTimeout(() => {
-      sendBtn.textContent = 'Enviar';
-      sendBtn.disabled = false;
-      sendForm.reset();
-      previewBox.classList.add('hidden');
-    }, 1000);
+    templates.push({ name:tplName.value, text:tplText.value });
+    tplForm.reset(); renderTemplates(); updatePreview();
   });
 
-  // Inicializar interfaz
-  updateTemplateOptions();
-  renderTemplateList();
+  // Initial Render
+  renderTemplates();
+  updatePreview();
 });

@@ -1,412 +1,360 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Envío WhatsApp</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WhatsApp Sender</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* Reset y base */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f5f7fa;
-      color: #222;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      background: #f0f2f5;
+      color: #333;
+      display: flex; flex-direction: column; min-height: 100vh;
     }
     header {
       background: #25D366;
-      padding: 1.5rem 1rem;
-      text-align: center;
       color: #fff;
-      font-weight: 600;
+      padding: 1.2rem;
+      text-align: center;
       font-size: 1.6rem;
-      letter-spacing: 0.05em;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      font-weight: 600;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
     nav {
       display: flex;
-      justify-content: center;
       background: #fff;
-      box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     nav button {
       flex: 1;
-      padding: 1rem 0;
+      padding: 1rem;
       border: none;
-      background: #f0f2f5;
-      font-weight: 600;
+      background: #f7f9fa;
       font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
-      letter-spacing: 0.03em;
+      transition: background 0.3s, color 0.3s;
     }
-    nav button:hover, nav button.active {
+    nav button.active {
       background: #25D366;
       color: #fff;
-      box-shadow: inset 0 -4px 0 #1ebe58;
     }
-
     main {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem 3rem;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem 1rem;
+    }
+    .container {
       background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-    }
-
-    section {
-      display: block;
-    }
-
-    label {
-      display: block;
-      margin: 1rem 0 0.4rem;
-      font-weight: 600;
-      color: #444;
-      font-size: 0.95rem;
-      user-select: none;
-    }
-    input[type="text"],
-    input[type="tel"],
-    select,
-    textarea {
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
       width: 100%;
-      padding: 0.65rem 0.8rem;
+      max-width: 800px;
+      overflow: hidden;
+      animation: fadeIn 0.5s ease;
+    }
+    section {
+      padding: 2rem;
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+    h2 {
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+      color: #25D366;
+      letter-spacing: 0.03em;
+    }
+    .field {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .field label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+    .field input[type="text"],
+    .field input[type="tel"],
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 1rem;
-      transition: border-color 0.2s;
-      resize: vertical;
-      font-family: 'Poppins', sans-serif;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
-    input[type="text"]:focus,
-    input[type="tel"]:focus,
-    select:focus,
-    textarea:focus {
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
       border-color: #25D366;
+      box-shadow: 0 0 8px rgba(37,211,102,0.3);
       outline: none;
-      box-shadow: 0 0 6px rgba(37,211,102,0.4);
     }
-
-    button {
-      margin-top: 1.6rem;
+    .actions {
+      display: flex;
+      gap: 0.6rem;
+    }
+    button.primary {
       background: #25D366;
+      color: #fff;
       border: none;
       border-radius: 8px;
-      color: white;
+      padding: 0.75rem;
+      font-size: 1rem;
       font-weight: 600;
-      font-size: 1.1rem;
-      padding: 14px 0;
-      width: 100%;
       cursor: pointer;
-      letter-spacing: 0.05em;
-      transition: background-color 0.3s ease;
-      user-select: none;
+      transition: background 0.3s;
     }
-    button:hover {
+    button.primary:hover {
       background: #1ebe58;
     }
-
-    #preview {
-      border: 1px solid #ddd;
-      background: #fafafa;
-      color: #333;
-      padding: 1rem;
-      margin-top: 0.7rem;
-      border-radius: 6px;
-      white-space: pre-line;
-      min-height: 5rem;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-    p {
-      color: #666;
-      font-size: 0.9rem;
-      margin-top: 1rem;
-      user-select: none;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 1rem;
-    }
-    li {
-      background: #f7f9fa;
-      margin-bottom: 0.75rem;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #222;
-      transition: background 0.2s;
-    }
-    li:hover {
-      background: #e6f4ea;
-    }
-
-    .actions button {
-      border: none;
-      color: white;
-      border-radius: 5px;
-      padding: 0.25rem 0.6rem;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      user-select: none;
-    }
-    .actions button.edit {
-      background: #ffb74d;
-      margin-right: 0.4rem;
-    }
-    .actions button.edit:hover {
-      background: #f0a830;
-    }
-    .actions button.delete {
+    button.secondary {
       background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem;
+      cursor: pointer;
+      transition: background 0.3s;
     }
-    .actions button.delete:hover {
+    button.secondary:hover {
       background: #c0392b;
     }
-
-    /* Responsive */
+    #preview {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f7f9fa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      white-space: pre-line;
+      font-weight: 500;
+    }
+    .template-item {
+      padding: 1rem;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .template-item:hover {
+      background: #f0f9f4;
+    }
+    .template-header {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #25D366;
+    }
+    .template-offer {
+      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+      color: #e67e22;
+    }
+    .template-actions {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.4rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     @media (max-width: 600px) {
-      nav button {
-        font-size: 0.9rem;
-        padding: 0.9rem 0;
-      }
-      main {
-        margin: 1rem;
-        padding: 1rem;
-      }
-      label {
-        font-size: 0.9rem;
-      }
-      button {
-        font-size: 1rem;
-        padding: 12px 0;
-      }
-      #preview {
-        font-size: 0.95rem;
-      }
-      li {
-        font-size: 0.95rem;
-      }
+      main { padding: 1rem; }
+      section { padding: 1rem; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  Envío WhatsApp
-</header>
+<header>WhatsApp Sender</header>
 
-<nav aria-label="Pestañas principales">
-  <button id="tab-send" class="active" aria-selected="true" role="tab" tabindex="0">Enviar WhatsApp</button>
-  <button id="tab-config" aria-selected="false" role="tab" tabindex="-1">Configurar Mensajes</button>
+<nav>
+  <button id="tab-send" class="active">Enviar Mensaje</button>
+  <button id="tab-templates">Plantillas</button>
 </nav>
 
 <main>
-  <section id="section-send" role="tabpanel" aria-labelledby="tab-send">
-    <label for="nombre">Nombre completo</label>
-    <input type="text" id="nombre" name="nombre" autocomplete="name" required />
+  <div class="container">
+    <!-- Enviar Mensaje -->
+    <section id="section-send" class="active">
+      <h2>Enviar Mensaje</h2>
+      <div class="field">
+        <label for="name">Nombre</label>
+        <input type="text" id="name" placeholder="Tu nombre">
+      </div>
+      <div class="field">
+        <label for="phone">Teléfono</label>
+        <input type="tel" id="phone" placeholder="+34 600 000 000">
+      </div>
+      <div class="field">
+        <label for="template-select">Plantilla</label>
+        <select id="template-select">
+          <option value="">-- Selecciona --</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="extra-message">Mensaje Opcional</label>
+        <textarea id="extra-message" rows="3" placeholder="Añade texto adicional"></textarea>
+      </div>
+      <button id="btn-preview" class="primary">Previsualizar</button>
+      <div id="preview">Aquí se mostrará la previsualización del mensaje...</div>
+    </section>
 
-    <label for="telefono">Número de teléfono</label>
-    <input type="tel" id="telefono" name="telefono" autocomplete="tel" required />
+    <!-- Gestión de Plantillas -->
+    <section id="section-templates">
+      <h2>Plantillas</h2>
+      <div class="field">
+        <label for="tpl-name">Nombre de Plantilla</label>
+        <input type="text" id="tpl-name" placeholder="Ej: Bienvenida">
+      </div>
+      <div class="field">
+        <label for="tpl-text">Texto de Plantilla</label>
+        <textarea id="tpl-text" rows="3" placeholder="Escribe el cuerpo del mensaje"></textarea>
+      </div>
+      <div class="field">
+        <label for="tpl-offer">Oferta Relacionada</label>
+        <input type="text" id="tpl-offer" placeholder="Ej: 20% descuento">
+      </div>
+      <button id="btn-add-template" class="primary">Añadir Plantilla</button>
 
-    <label for="plantilla-select">Selecciona plantilla</label>
-    <select id="plantilla-select" name="plantilla-select" aria-describedby="plantilla-desc">
-      <option value="">-- Nuevo mensaje --</option>
-    </select>
-    <span id="plantilla-desc" class="sr-only">Elige una plantilla o escribe tu propio mensaje abajo</span>
-
-    <label for="mensaje">Mensaje</label>
-    <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribe o selecciona un mensaje"></textarea>
-
-    <button id="btn-preview" type="button">Previsualizar mensaje</button>
-
-    <h3>Previsualización:</h3>
-    <div id="preview" aria-live="polite" aria-atomic="true">Completa los campos para ver la previsualización...</div>
-    <p>📱 El mensaje se enviará al número que introduzcas.</p>
-  </section>
-
-  <section id="section-config" class="hidden" role="tabpanel" aria-labelledby="tab-config">
-    <label for="new-plantilla">Nueva plantilla</label>
-    <input type="text" id="new-plantilla" placeholder="Texto de la plantilla" />
-
-    <button id="btn-add" type="button">Añadir plantilla</button>
-
-    <h3>Plantillas disponibles:</h3>
-    <ul id="lista-plantillas" aria-live="polite" aria-relevant="all"></ul>
-  </section>
+      <div id="templates-list">
+        <!-- Los ítems de plantilla se crearán aquí -->
+      </div>
+    </section>
+  </div>
 </main>
 
 <script>
-  const API_KEY = 'MI_API_KEY_SECRETO'; // Cambiar por tu clave secreta backend
-
-  // Tab UI Accessibility
+  // Tab switching
   const tabSend = document.getElementById('tab-send');
-  const tabConfig = document.getElementById('tab-config');
+  const tabTemplates = document.getElementById('tab-templates');
   const sectionSend = document.getElementById('section-send');
-  const sectionConfig = document.getElementById('section-config');
+  const sectionTemplates = document.getElementById('section-templates');
 
-  function activateTab(selectedTab, selectedPanel) {
-    [tabSend, tabConfig].forEach(tab => {
-      tab.classList.toggle('active', tab === selectedTab);
-      tab.setAttribute('aria-selected', tab === selectedTab ? 'true' : 'false');
-      tab.tabIndex = tab === selectedTab ? 0 : -1;
-    });
-    [sectionSend, sectionConfig].forEach(panel => {
-      panel.classList.toggle('hidden', panel !== selectedPanel);
-    });
-    selectedPanel.focus();
-  }
-
-  tabSend.addEventListener('click', () => activateTab(tabSend, sectionSend));
-  tabConfig.addEventListener('click', () => {
-    activateTab(tabConfig, sectionConfig);
-    renderLista();
+  tabSend.addEventListener('click', () => {
+    tabSend.classList.add('active'); tabTemplates.classList.remove('active');
+    sectionSend.classList.add('active'); sectionTemplates.classList.remove('active');
+  });
+  tabTemplates.addEventListener('click', () => {
+    tabTemplates.classList.add('active'); tabSend.classList.remove('active');
+    sectionTemplates.classList.add('active'); sectionSend.classList.remove('active');
+    renderTemplates();
   });
 
-  // Elements
-  const nombreEl = document.getElementById('nombre');
-  const telefonoEl = document.getElementById('telefono');
-  const plantillaSelect = document.getElementById('plantilla-select');
-  const mensajeEl = document.getElementById('mensaje');
+  // Plantillas almacenadas en localStorage
+  let templates = JSON.parse(localStorage.getItem('wa_templates') || '[]');
+
+  // Elementos
+  const tplName = document.getElementById('tpl-name');
+  const tplText = document.getElementById('tpl-text');
+  const tplOffer = document.getElementById('tpl-offer');
+  const btnAddTpl = document.getElementById('btn-add-template');
+  const tplList = document.getElementById('templates-list');
+  const tplSelect = document.getElementById('template-select');
+  const nameEl = document.getElementById('name');
+  const phoneEl = document.getElementById('phone');
+  const extraMsgEl = document.getElementById('extra-message');
   const btnPreview = document.getElementById('btn-preview');
   const previewEl = document.getElementById('preview');
 
-  const newPlantillaEl = document.getElementById('new-plantilla');
-  const btnAdd = document.getElementById('btn-add');
-  const listaPlantillasEl = document.getElementById('lista-plantillas');
-
-  let plantillas = [];
-
-  // Load plantillas raw JSON from GitHub
-  async function fetchPlantillas() {
-    try {
-      const resp = await fetch('https://raw.githubusercontent.com/TU_USUARIO/TU_REPOSITORIO/main/plantillas.json');
-      if (!resp.ok) throw new Error('No se pudo cargar plantillas');
-      const data = await resp.json();
-      plantillas = data;
-      renderSelect();
-    } catch (e) {
-      plantillas = [];
-      renderSelect();
-      console.warn('No se encontraron plantillas iniciales.');
-    }
+  // Guardar en localStorage
+  function saveTemplates() {
+    localStorage.setItem('wa_templates', JSON.stringify(templates));
   }
 
-  // Save plantillas via backend API
-  async function savePlantillas() {
-    try {
-      const res = await fetch('http://localhost:3000/save-plantillas', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({ plantillas })
-      });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-      console.log('Guardado commit:', data.commit);
-    } catch (e) {
-      alert('Error guardando plantillas: ' + e.message);
-    }
-  }
-
-  function renderLista() {
-    listaPlantillasEl.innerHTML = '';
-    plantillas.forEach((text, i) => {
-      const li = document.createElement('li');
-      li.textContent = text;
-
-      const actions = document.createElement('div');
-      actions.className = 'actions';
-
-      const btnEdit = document.createElement('button');
-      btnEdit.textContent = '✏️';
-      btnEdit.className = 'edit';
-      btnEdit.title = 'Editar plantilla';
-      btnEdit.onclick = () => {
-        const nuevo = prompt('Editar plantilla:', text);
-        if (nuevo !== null && nuevo.trim() !== '') {
-          plantillas[i] = nuevo.trim();
-          savePlantillas();
-          renderLista();
+  // Renderiza lista de plantillas en sección Plantillas
+  function renderTemplates() {
+    tplList.innerHTML = '';
+    templates.forEach((tpl, i) => {
+      const div = document.createElement('div');
+      div.className = 'template-item';
+      div.innerHTML = `
+        <div class="template-header">${tpl.name}</div>
+        <div class="template-offer">${tpl.offer || ''}</div>
+        <div>${tpl.text}</div>
+        <div class="template-actions">
+          <button class="edit">✏️</button>
+          <button class="delete">🗑️</button>
+        </div>`;
+      // Editar
+      div.querySelector('.edit').onclick = () => {
+        const newName = prompt('Nombre:', tpl.name);
+        const newOffer = prompt('Oferta:', tpl.offer);
+        const newText = prompt('Texto:', tpl.text);
+        if (newName && newText) {
+          templates[i] = { name: newName, offer: newOffer, text: newText };
+          saveTemplates();
+          renderTemplates();
           renderSelect();
         }
       };
-
-      const btnDel = document.createElement('button');
-      btnDel.textContent = '🗑️';
-      btnDel.className = 'delete';
-      btnDel.title = 'Eliminar plantilla';
-      btnDel.onclick = () => {
-        if (confirm('¿Eliminar plantilla?')) {
-          plantillas.splice(i, 1);
-          savePlantillas();
-          renderLista();
+      // Eliminar
+      div.querySelector('.delete').onclick = () => {
+        if (confirm('Eliminar plantilla?')) {
+          templates.splice(i,1);
+          saveTemplates();
+          renderTemplates();
           renderSelect();
         }
       };
-
-      actions.appendChild(btnEdit);
-      actions.appendChild(btnDel);
-      li.appendChild(actions);
-      listaPlantillasEl.appendChild(li);
+      tplList.appendChild(div);
     });
   }
 
+  // Renderiza opciones en el select de envío
   function renderSelect() {
-    plantillaSelect.innerHTML = '<option value="">-- Nuevo mensaje --</option>';
-    plantillas.forEach((text, i) => {
+    tplSelect.innerHTML = '<option value="">-- Selecciona --</option>';
+    templates.forEach((tpl, i) => {
       const opt = document.createElement('option');
       opt.value = i;
-      opt.textContent = text;
-      plantillaSelect.appendChild(opt);
+      opt.textContent = tpl.name;
+      tplSelect.appendChild(opt);
     });
   }
 
-  plantillaSelect.addEventListener('change', () => {
-    const idx = plantillaSelect.value;
-    mensajeEl.value = idx === '' ? '' : plantillas[idx];
-  });
-
-  btnAdd.addEventListener('click', () => {
-    const text = newPlantillaEl.value.trim();
-    if (!text) return alert('Escribe un texto para la plantilla');
-    plantillas.push(text);
-    savePlantillas();
-    newPlantillaEl.value = '';
-    renderLista();
-    renderSelect();
-  });
-
-  btnPreview.addEventListener('click', () => {
-    const nombre = nombreEl.value.trim();
-    const tel = telefonoEl.value.trim();
-    const msg = mensajeEl.value.trim();
-    if (!nombre || !tel || !msg) {
-      return alert('Rellena nombre, teléfono y mensaje.');
+  // Añadir plantilla nueva
+  btnAddTpl.onclick = () => {
+    const name = tplName.value.trim();
+    const text = tplText.value.trim();
+    const offer = tplOffer.value.trim();
+    if (name && text) {
+      templates.push({ name, text, offer });
+      saveTemplates();
+      tplName.value=''; tplText.value=''; tplOffer.value='';
+      renderTemplates();
+      renderSelect();
+    } else {
+      alert('Nombre y texto son obligatorios');
     }
-    previewEl.textContent = `Hola ${nombre},\n\n${msg}`;
-  });
+  };
 
-  fetchPlantillas();
+  // Previsualizar envío
+  btnPreview.onclick = () => {
+    const idx = tplSelect.value;
+    const extra = extraMsgEl.value.trim();
+    const name = nameEl.value.trim();
+    const phone = phoneEl.value.trim();
+    if (!name || !phone) return alert('Nombre y teléfono son obligatorios');
+    let msg = idx!=='' ? templates[idx].text : '';
+    if (extra) msg += '\n\n' + extra;
+    previewEl.textContent = `To: ${phone}\nHola ${name},\n\n${msg}`;
+  };
+
+  // Iniciar
+  renderTemplates();
+  renderSelect();
 </script>
 
 </body>

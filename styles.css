@@ -106,13 +106,12 @@ body {
 
 /* Buttons */
 .btn {
-  display: flex; align-items: center; justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center;
   gap: 0.5rem;
-  padding: 1rem;
-  border: none; border-radius: var(--radius);
+  padding: 1rem; border: none; border-radius: var(--radius);
   background: var(--whatsapp-green); color: #fff;
-  font-size: 1rem; font-weight: 600;
-  cursor: pointer; transition: var(--transition);
+  font-size: 1rem; font-weight: 600; cursor: pointer;
+  transition: var(--transition);
   box-shadow:
     -4px -4px 8px var(--shadow-light),
      4px  4px 8px var(--shadow-dark);
@@ -127,14 +126,12 @@ body {
 
 /* Preview */
 .card--preview .preview {
-  display: flex; align-items: flex-start;
-  gap: 1rem;
+  display: flex; align-items: flex-start; gap: 1rem;
 }
 .preview__icon {
   width: 32px; height: 32px;
   background: var(--whatsapp-green) url('whatsapp-icon.svg') no-repeat center;
-  background-size: 60%;
-  border-radius: 50%;
+  background-size: 60%; border-radius: 50%;
   box-shadow:
     -2px -2px 4px var(--shadow-light),
      2px  2px 4px var(--shadow-dark);

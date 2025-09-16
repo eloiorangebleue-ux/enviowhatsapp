@@ -1,29 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Pestañas
-  const tabs = document.querySelectorAll('.tab');
+  const tabs = document.querySelectorAll('.tabs__btn');
   const contents = document.querySelectorAll('.tab-content');
   tabs.forEach(tab => tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    contents.forEach(c => c.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById(tab.dataset.tab).classList.add('active');
+    tabs.forEach(t => t.classList.remove('tabs__btn--active'));
+    contents.forEach(c => c.classList.remove('tab-content--active'));
+    tab.classList.add('tabs__btn--active');
+    document.getElementById(tab.dataset.tab).classList.add('tab-content--active');
   }));
 
-  // SECCIÓN “Enviar”
-  const sendForm = document.getElementById('form-send');
-  const sendName = document.getElementById('send-name');
-  const sendPhone = document.getElementById('send-phone');
-  const sendTplSelect = document.getElementById('send-template');
-  const sendOffer = document.getElementById('send-offer');
-  const sendExtra = document.getElementById('send-extra');
-  const previewText = document.getElementById('preview-text');
-  const btnSend = document.getElementById('btn-send');
+  // Sección Enviar
+  const sendName     = document.getElementById('send-name');
+  const sendPhone    = document.getElementById('send-phone');
+  const sendTplSelect= document.getElementById('send-template');
+  const sendOffer    = document.getElementById('send-offer');
+  const sendExtra    = document.getElementById('send-extra');
+  const previewText  = document.getElementById('preview-text');
+  const btnSend      = document.getElementById('btn-send');
 
-  // SECCIÓN “Plantillas”
-  const tplForm = document.getElementById('form-templates');
-  const tplName = document.getElementById('tpl-name');
-  const tplText = document.getElementById('tpl-text');
-  const tplList = document.getElementById('tpl-list');
+  // Sección Plantillas
+  const tplForm      = document.getElementById('form-templates');
+  const tplName      = document.getElementById('tpl-name');
+  const tplText      = document.getElementById('tpl-text');
+  const tplList      = document.getElementById('tpl-list');
 
   // Datos de plantillas
   let templates = [
@@ -32,11 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     'INFORMACION','ENTRENAMIENTO DE PRUEBA','PREINSCRIPCIÓN','DEUDA','FORMULARIO NUTRICIÓN'
   ].map(name => ({ name, text: name }));
 
-  // Render de plantillas en ambas secciones
+  // Renderiza plantillas
   function renderTemplates() {
-    // Opciones en “Enviar”
-    sendTplSelect.innerHTML = '<option value="">-- Selecciona --</option>';
-    // Lista en “Plantillas”
+    sendTplSelect.innerHTML = '<option value="">Selecciona plantilla</option>';
     tplList.innerHTML = '';
     templates.forEach((tpl, i) => {
       sendTplSelect.innerHTML += `<option value="${i}">${tpl.name}</option>`;
@@ -51,11 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Actualiza previsualización automáticamente
+  // Actualiza la previsualización automáticamente
   function updatePreview() {
     const name = sendName.value || '…';
-    const idx = sendTplSelect.value;
-    let msg = idx !== '' ? templates[idx].text : 'selecciona una plantilla';
+    const idx  = sendTplSelect.value;
+    let msg = idx !== '' ? templates[idx].text : 'selecciona plantilla';
     if (sendOffer.value) msg += `\nOferta: ${sendOffer.value}`;
     if (sendExtra.value) msg += `\n${sendExtra.value}`;
     previewText.textContent = `Hola ${name}, ${msg}`;
@@ -64,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('input', updatePreview)
   );
 
-  // Enviar WhatsApp real
+  // Enviar a WhatsApp
   btnSend.addEventListener('click', () => {
     const phone = sendPhone.value.trim();
     if (!phone) return alert('Introduce un número válido');

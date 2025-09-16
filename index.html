@@ -1,361 +1,74 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WhatsApp Sender</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    /* Reset y base */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f0f2f5;
-      color: #333;
-      display: flex; flex-direction: column; min-height: 100vh;
-    }
-    header {
-      background: #25D366;
-      color: #fff;
-      padding: 1.2rem;
-      text-align: center;
-      font-size: 1.6rem;
-      font-weight: 600;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    nav {
-      display: flex;
-      background: #fff;
-      justify-content: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    nav button {
-      flex: 1;
-      padding: 1rem;
-      border: none;
-      background: #f7f9fa;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-    }
-    nav button.active {
-      background: #25D366;
-      color: #fff;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 2rem 1rem;
-    }
-    .container {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 800px;
-      overflow: hidden;
-      animation: fadeIn 0.5s ease;
-    }
-    section {
-      padding: 2rem;
-      display: none;
-    }
-    section.active {
-      display: block;
-    }
-    h2 {
-      margin-bottom: 1.2rem;
-      font-weight: 600;
-      color: #25D366;
-      letter-spacing: 0.03em;
-    }
-    .field {
-      margin-bottom: 1rem;
-      position: relative;
-    }
-    .field label {
-      display: block;
-      margin-bottom: 0.4rem;
-      font-weight: 500;
-    }
-    .field input[type="text"],
-    .field input[type="tel"],
-    .field select,
-    .field textarea {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: #25D366;
-      box-shadow: 0 0 8px rgba(37,211,102,0.3);
-      outline: none;
-    }
-    .actions {
-      display: flex;
-      gap: 0.6rem;
-    }
-    button.primary {
-      background: #25D366;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.75rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button.primary:hover {
-      background: #1ebe58;
-    }
-    button.secondary {
-      background: #e74c3c;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.75rem;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button.secondary:hover {
-      background: #c0392b;
-    }
-    #preview {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: #f7f9fa;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      white-space: pre-line;
-      font-weight: 500;
-    }
-    .template-item {
-      padding: 1rem;
-      border: 1px solid #eee;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      position: relative;
-      transition: background 0.2s;
-    }
-    .template-item:hover {
-      background: #f0f9f4;
-    }
-    .template-header {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #25D366;
-    }
-    .template-offer {
-      font-size: 0.9rem;
-      margin-bottom: 0.8rem;
-      color: #e67e22;
-    }
-    .template-actions {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      display: flex;
-      gap: 0.4rem;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @media (max-width: 600px) {
-      main { padding: 1rem; }
-      section { padding: 1rem; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-
-<header>WhatsApp Sender</header>
-
-<nav>
-  <button id="tab-send" class="active">Enviar Mensaje</button>
-  <button id="tab-templates">Plantillas</button>
-</nav>
-
-<main>
   <div class="container">
-    <!-- Enviar Mensaje -->
-    <section id="section-send" class="active">
-      <h2>Enviar Mensaje</h2>
-      <div class="field">
-        <label for="name">Nombre</label>
-        <input type="text" id="name" placeholder="Tu nombre">
+    <nav class="tabs">
+      <button class="tab active" data-tab="send">Enviar Mensaje</button>
+      <button class="tab" data-tab="templates">Plantillas</button>
+    </nav>
+
+    <!-- Pestaña: Envío de Mensajes -->
+    <section id="send" class="tab-content active">
+      <h2>Enviar WhatsApp</h2>
+      <form id="sendForm">
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input type="text" id="name" required/>
+        </div>
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input type="tel" id="phone" required/>
+        </div>
+        <div class="form-group">
+          <label for="templateSelect">Plantilla</label>
+          <select id="templateSelect">
+            <!-- Opciones dinámicas -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="offer">Oferta Relacionada</label>
+          <input type="text" id="offer"/>
+        </div>
+        <div class="form-group">
+          <label for="extraMsg">Mensaje Opcional</label>
+          <textarea id="extraMsg" rows="3"></textarea>
+        </div>
+        <button type="button" id="previewBtn">Previsualizar</button>
+        <button type="submit">Enviar</button>
+      </form>
+      <div id="previewBox" class="preview hidden">
+        <h3>Previsualización:</h3>
+        <div id="previewContent"></div>
       </div>
-      <div class="field">
-        <label for="phone">Teléfono</label>
-        <input type="tel" id="phone" placeholder="+34 600 000 000">
-      </div>
-      <div class="field">
-        <label for="template-select">Plantilla</label>
-        <select id="template-select">
-          <option value="">-- Selecciona --</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="extra-message">Mensaje Opcional</label>
-        <textarea id="extra-message" rows="3" placeholder="Añade texto adicional"></textarea>
-      </div>
-      <button id="btn-preview" class="primary">Previsualizar</button>
-      <div id="preview">Aquí se mostrará la previsualización del mensaje...</div>
     </section>
 
-    <!-- Gestión de Plantillas -->
-    <section id="section-templates">
+    <!-- Pestaña: Gestión de Plantillas -->
+    <section id="templates" class="tab-content">
       <h2>Plantillas</h2>
-      <div class="field">
-        <label for="tpl-name">Nombre de Plantilla</label>
-        <input type="text" id="tpl-name" placeholder="Ej: Bienvenida">
-      </div>
-      <div class="field">
-        <label for="tpl-text">Texto de Plantilla</label>
-        <textarea id="tpl-text" rows="3" placeholder="Escribe el cuerpo del mensaje"></textarea>
-      </div>
-      <div class="field">
-        <label for="tpl-offer">Oferta Relacionada</label>
-        <input type="text" id="tpl-offer" placeholder="Ej: 20% descuento">
-      </div>
-      <button id="btn-add-template" class="primary">Añadir Plantilla</button>
-
-      <div id="templates-list">
-        <!-- Los ítems de plantilla se crearán aquí -->
-      </div>
+      <form id="templateForm">
+        <div class="form-group">
+          <label for="tplName">Nombre de Plantilla</label>
+          <input type="text" id="tplName" required/>
+        </div>
+        <div class="form-group">
+          <label for="tplText">Texto de Plantilla</label>
+          <textarea id="tplText" rows="4" required></textarea>
+        </div>
+        <button type="submit">Guardar Plantilla</button>
+      </form>
+      <ul id="templateList" class="template-list">
+        <!-- Listado dinámico -->
+      </ul>
     </section>
   </div>
-</main>
 
-<script>
-  // Tab switching
-  const tabSend = document.getElementById('tab-send');
-  const tabTemplates = document.getElementById('tab-templates');
-  const sectionSend = document.getElementById('section-send');
-  const sectionTemplates = document.getElementById('section-templates');
-
-  tabSend.addEventListener('click', () => {
-    tabSend.classList.add('active'); tabTemplates.classList.remove('active');
-    sectionSend.classList.add('active'); sectionTemplates.classList.remove('active');
-  });
-  tabTemplates.addEventListener('click', () => {
-    tabTemplates.classList.add('active'); tabSend.classList.remove('active');
-    sectionTemplates.classList.add('active'); sectionSend.classList.remove('active');
-    renderTemplates();
-  });
-
-  // Plantillas almacenadas en localStorage
-  let templates = JSON.parse(localStorage.getItem('wa_templates') || '[]');
-
-  // Elementos
-  const tplName = document.getElementById('tpl-name');
-  const tplText = document.getElementById('tpl-text');
-  const tplOffer = document.getElementById('tpl-offer');
-  const btnAddTpl = document.getElementById('btn-add-template');
-  const tplList = document.getElementById('templates-list');
-  const tplSelect = document.getElementById('template-select');
-  const nameEl = document.getElementById('name');
-  const phoneEl = document.getElementById('phone');
-  const extraMsgEl = document.getElementById('extra-message');
-  const btnPreview = document.getElementById('btn-preview');
-  const previewEl = document.getElementById('preview');
-
-  // Guardar en localStorage
-  function saveTemplates() {
-    localStorage.setItem('wa_templates', JSON.stringify(templates));
-  }
-
-  // Renderiza lista de plantillas en sección Plantillas
-  function renderTemplates() {
-    tplList.innerHTML = '';
-    templates.forEach((tpl, i) => {
-      const div = document.createElement('div');
-      div.className = 'template-item';
-      div.innerHTML = `
-        <div class="template-header">${tpl.name}</div>
-        <div class="template-offer">${tpl.offer || ''}</div>
-        <div>${tpl.text}</div>
-        <div class="template-actions">
-          <button class="edit">✏️</button>
-          <button class="delete">🗑️</button>
-        </div>`;
-      // Editar
-      div.querySelector('.edit').onclick = () => {
-        const newName = prompt('Nombre:', tpl.name);
-        const newOffer = prompt('Oferta:', tpl.offer);
-        const newText = prompt('Texto:', tpl.text);
-        if (newName && newText) {
-          templates[i] = { name: newName, offer: newOffer, text: newText };
-          saveTemplates();
-          renderTemplates();
-          renderSelect();
-        }
-      };
-      // Eliminar
-      div.querySelector('.delete').onclick = () => {
-        if (confirm('Eliminar plantilla?')) {
-          templates.splice(i,1);
-          saveTemplates();
-          renderTemplates();
-          renderSelect();
-        }
-      };
-      tplList.appendChild(div);
-    });
-  }
-
-  // Renderiza opciones en el select de envío
-  function renderSelect() {
-    tplSelect.innerHTML = '<option value="">-- Selecciona --</option>';
-    templates.forEach((tpl, i) => {
-      const opt = document.createElement('option');
-      opt.value = i;
-      opt.textContent = tpl.name;
-      tplSelect.appendChild(opt);
-    });
-  }
-
-  // Añadir plantilla nueva
-  btnAddTpl.onclick = () => {
-    const name = tplName.value.trim();
-    const text = tplText.value.trim();
-    const offer = tplOffer.value.trim();
-    if (name && text) {
-      templates.push({ name, text, offer });
-      saveTemplates();
-      tplName.value=''; tplText.value=''; tplOffer.value='';
-      renderTemplates();
-      renderSelect();
-    } else {
-      alert('Nombre y texto son obligatorios');
-    }
-  };
-
-  // Previsualizar envío
-  btnPreview.onclick = () => {
-    const idx = tplSelect.value;
-    const extra = extraMsgEl.value.trim();
-    const name = nameEl.value.trim();
-    const phone = phoneEl.value.trim();
-    if (!name || !phone) return alert('Nombre y teléfono son obligatorios');
-    let msg = idx!=='' ? templates[idx].text : '';
-    if (extra) msg += '\n\n' + extra;
-    previewEl.textContent = `To: ${phone}\nHola ${name},\n\n${msg}`;
-  };
-
-  // Iniciar
-  renderTemplates();
-  renderSelect();
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>

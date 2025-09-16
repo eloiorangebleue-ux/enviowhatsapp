@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Envío WhatsApp</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f9f9f9; color: #333; }
     header { background: #25D366; color: #fff; padding: 1rem; text-align: center; }
@@ -18,191 +18,203 @@
     .hidden { display: none; }
     ul { list-style: none; padding: 0; }
     li { background: #fff; margin: 0.5rem 0; padding: 0.5rem; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
-    .actions button { margin-left: 0.5rem; background: #e33; }
+    .actions button { margin-left: 0.5rem; background: #e33; border: none; color: white; border-radius: 4px; cursor: pointer; padding: 0 6px; }
     .actions button.edit { background: #f0ad4e; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Envío WhatsApp</h1>
-  </header>
+<header>
+  <h1>Envío WhatsApp</h1>
+</header>
 
-  <nav>
-    <button id="tab-send" class="active">Enviar WhatsApp</button>
-    <button id="tab-config">Configurar Mensajes</button>
-  </nav>
+<nav>
+  <button id="tab-send" class="active">Enviar WhatsApp</button>
+  <button id="tab-config">Configurar Mensajes</button>
+</nav>
 
-  <main>
-    <!-- Enviar WhatsApp -->
-    <section id="section-send">
-      <label>Tu código de acceso
-        <input type="text" id="code-input" placeholder="Ej: GYM-XM3L0K" />
-      </label>
-      <button id="btn-load">Cargar datos</button>
+<main>
+  <section id="section-send">
+    <label>Nombre completo
+      <input type="text" id="nombre" required />
+    </label>
+    <label>Número de teléfono
+      <input type="tel" id="telefono" required />
+    </label>
+    <label>Selecciona plantilla
+      <select id="plantilla-select">
+        <option value="">-- Nuevo mensaje --</option>
+      </select>
+    </label>
+    <label>Mensaje
+      <textarea id="mensaje" rows="4"></textarea>
+    </label>
+    <button id="btn-preview">Previsualizar mensaje</button>
 
-      <label>Nombre completo
-        <input type="text" id="nombre" required />
-      </label>
-      <label>Número de teléfono
-        <input type="tel" id="telefono" required />
-      </label>
-      <label>Selecciona plantilla
-        <select id="plantilla-select">
-          <option value="">-- Nuevo mensaje --</option>
-        </select>
-      </label>
-      <label>Mensaje
-        <textarea id="mensaje" rows="4"></textarea>
-      </label>
-      <button id="btn-preview">Previsualizar mensaje</button>
+    <h3>Previsualización:</h3>
+    <div id="preview">Completa los campos para ver la previsualización...</div>
+    <p>📱 El mensaje se enviará al número que introduzcas.</p>
+  </section>
 
-      <h3>Previsualización:</h3>
-      <div id="preview">Completa los campos para ver la previsualización...</div>
-      <p>📱 El mensaje se enviará al número que introduzcas.</p>
-    </section>
+  <section id="section-config" class="hidden">
+    <label>Nueva plantilla
+      <input type="text" id="new-plantilla" placeholder="Texto de la plantilla" />
+    </label>
+    <button id="btn-add">Añadir plantilla</button>
 
-    <!-- Configurar Mensajes -->
-    <section id="section-config" class="hidden">
-      <label>Nueva plantilla
-        <input type="text" id="new-plantilla" placeholder="Texto de la plantilla" />
-      </label>
-      <button id="btn-add">Añadir plantilla</button>
+    <h3>Plantillas disponibles:</h3>
+    <ul id="lista-plantillas"></ul>
+  </section>
+</main>
 
-      <h3>Plantillas disponibles:</h3>
-      <ul id="lista-plantillas"></ul>
-    </section>
-  </main>
+<script>
+  const API_KEY = 'MI_API_KEY_SECRETO'; // Ajusta igual a backend
 
-  <script>
-    // Elementos
-    const tabSend = document.getElementById('tab-send');
-    const tabConfig = document.getElementById('tab-config');
-    const sectionSend = document.getElementById('section-send');
-    const sectionConfig = document.getElementById('section-config');
+  // Tabs
+  const tabSend = document.getElementById('tab-send');
+  const tabConfig = document.getElementById('tab-config');
+  const sectionSend = document.getElementById('section-send');
+  const sectionConfig = document.getElementById('section-config');
 
-    const codeInput = document.getElementById('code-input');
-    const btnLoad = document.getElementById('btn-load');
+  tabSend.addEventListener('click', () => {
+    tabSend.classList.add('active');
+    tabConfig.classList.remove('active');
+    sectionSend.classList.remove('hidden');
+    sectionConfig.classList.add('hidden');
+  });
+  tabConfig.addEventListener('click', () => {
+    tabConfig.classList.add('active');
+    tabSend.classList.remove('active');
+    sectionConfig.classList.remove('hidden');
+    sectionSend.classList.add('hidden');
+    renderLista();
+  });
 
-    const nombreEl = document.getElementById('nombre');
-    const telefonoEl = document.getElementById('telefono');
-    const plantillaSelect = document.getElementById('plantilla-select');
-    const mensajeEl = document.getElementById('mensaje');
-    const btnPreview = document.getElementById('btn-preview');
-    const previewEl = document.getElementById('preview');
+  // Elementos form
+  const nombreEl = document.getElementById('nombre');
+  const telefonoEl = document.getElementById('telefono');
+  const plantillaSelect = document.getElementById('plantilla-select');
+  const mensajeEl = document.getElementById('mensaje');
+  const btnPreview = document.getElementById('btn-preview');
+  const previewEl = document.getElementById('preview');
 
-    const newPlantillaEl = document.getElementById('new-plantilla');
-    const btnAdd = document.getElementById('btn-add');
-    const listaPlantillasEl = document.getElementById('lista-plantillas');
+  const newPlantillaEl = document.getElementById('new-plantilla');
+  const btnAdd = document.getElementById('btn-add');
+  const listaPlantillasEl = document.getElementById('lista-plantillas');
 
-    let plantillas = [];
+  // Variables
+  let plantillas = [];
 
-    // Cambio de pestañas
-    tabSend.addEventListener('click', () => {
-      tabSend.classList.add('active');
-      tabConfig.classList.remove('active');
-      sectionSend.classList.remove('hidden');
-      sectionConfig.classList.add('hidden');
-    });
-    tabConfig.addEventListener('click', () => {
-      tabConfig.classList.add('active');
-      tabSend.classList.remove('active');
-      sectionConfig.classList.remove('hidden');
-      sectionSend.classList.add('hidden');
-      renderLista();
-    });
-
-    // Cargar desde localStorage
-    btnLoad.addEventListener('click', () => {
-      const code = codeInput.value.trim();
-      if (!code) return alert('Introduce un código de acceso');
-      const saved = localStorage.getItem('plantillas_' + code);
-      plantillas = saved ? JSON.parse(saved) : [];
+  // Cargar plantillas desde GitHub
+  async function fetchPlantillas() {
+    try {
+      const resp = await fetch('https://raw.githubusercontent.com/TU_USUARIO/TU_REPOSITORIO/main/plantillas.json');
+      if (!resp.ok) throw new Error('No se pudo cargar plantillas');
+      const data = await resp.json();
+      plantillas = data;
       renderSelect();
-      alert('Datos cargados correctamente');
-    });
-
-    // Añadir plantilla
-    btnAdd.addEventListener('click', () => {
-      const text = newPlantillaEl.value.trim();
-      if (!text) return;
-      plantillas.push(text);
-      save();
-      newPlantillaEl.value = '';
-      renderLista();
+    } catch (e) {
+      plantillas = [];
       renderSelect();
-    });
-
-    // Guardar en localStorage
-    function save() {
-      const code = codeInput.value.trim();
-      if (!code) return alert('Introduce un código para guardar');
-      localStorage.setItem('plantillas_' + code, JSON.stringify(plantillas));
+      console.warn('No se encontraron plantillas iniciales.');
     }
+  }
 
-    // Renderizar lista de Configuración
-    function renderLista() {
-      listaPlantillasEl.innerHTML = '';
-      plantillas.forEach((text, i) => {
-        const li = document.createElement('li');
-        li.textContent = text;
-        const actions = document.createElement('div');
-        actions.className = 'actions';
-        const btnEdit = document.createElement('button');
-        btnEdit.textContent = '✏️';
-        btnEdit.className = 'edit';
-        btnEdit.onclick = () => {
-          const nuevo = prompt('Editar plantilla:', text);
-          if (nuevo !== null) {
-            plantillas[i] = nuevo.trim() || text;
-            save();
-            renderLista();
-            renderSelect();
-          }
-        };
-        const btnDel = document.createElement('button');
-        btnDel.textContent = '🗑️';
-        btnDel.onclick = () => {
-          plantillas.splice(i, 1);
-          save();
+  // Guardar en backend/API
+  async function savePlantillas() {
+    try {
+      const res = await fetch('http://localhost:3000/save-plantillas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify({ plantillas })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      alert('Guardado correcto.');
+    } catch (e) {
+      alert('Error guardando plantillas: ' + e.message);
+    }
+  }
+
+  function renderLista() {
+    listaPlantillasEl.innerHTML = '';
+    plantillas.forEach((text, i) => {
+      const li = document.createElement('li');
+      li.textContent = text;
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+
+      const btnEdit = document.createElement('button');
+      btnEdit.textContent = '✏️';
+      btnEdit.className = 'edit';
+      btnEdit.onclick = () => {
+        const nuevo = prompt('Editar plantilla:', text);
+        if (nuevo !== null && nuevo.trim() !== '') {
+          plantillas[i] = nuevo.trim();
+          savePlantillas();
           renderLista();
           renderSelect();
-        };
-        actions.appendChild(btnEdit);
-        actions.appendChild(btnDel);
-        li.appendChild(actions);
-        listaPlantillasEl.appendChild(li);
-      });
-    }
+        }
+      };
 
-    // Renderizar select de Envío
-    function renderSelect() {
-      plantillaSelect.innerHTML = '<option value="">-- Nuevo mensaje --</option>';
-      plantillas.forEach((text, i) => {
-        const opt = document.createElement('option');
-        opt.value = i;
-        opt.textContent = text;
-        plantillaSelect.appendChild(opt);
-      });
-    }
+      const btnDel = document.createElement('button');
+      btnDel.textContent = '🗑️';
+      btnDel.onclick = () => {
+        if (confirm('¿Eliminar plantilla?')) {
+          plantillas.splice(i, 1);
+          savePlantillas();
+          renderLista();
+          renderSelect();
+        }
+      };
 
-    // Selección de plantilla
-    plantillaSelect.addEventListener('change', () => {
-      const idx = plantillaSelect.value;
-      mensajeEl.value = idx === '' ? '' : plantillas[idx];
+      actions.appendChild(btnEdit);
+      actions.appendChild(btnDel);
+      li.appendChild(actions);
+      listaPlantillasEl.appendChild(li);
     });
+  }
 
-    // Previsualizar mensaje
-    btnPreview.addEventListener('click', () => {
-      const nombre = nombreEl.value.trim();
-      const tel = telefonoEl.value.trim();
-      const msg = mensajeEl.value.trim();
-      if (!nombre || !tel || !msg) {
-        return alert('Rellena nombre, teléfono y mensaje.');
-      }
-      previewEl.textContent = `Hola ${nombre},\n\n${msg}`;
+  function renderSelect() {
+    plantillaSelect.innerHTML = '<option value="">-- Nuevo mensaje --</option>';
+    plantillas.forEach((text, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = text;
+      plantillaSelect.appendChild(opt);
     });
-  </script>
+  }
+
+  plantillaSelect.addEventListener('change', () => {
+    const idx = plantillaSelect.value;
+    mensajeEl.value = idx === '' ? '' : plantillas[idx];
+  });
+
+  btnAdd.addEventListener('click', () => {
+    const text = newPlantillaEl.value.trim();
+    if (!text) return alert('Escribe un texto para la plantilla');
+    plantillas.push(text);
+    savePlantillas();
+    newPlantillaEl.value = '';
+    renderLista();
+    renderSelect();
+  });
+
+  btnPreview.addEventListener('click', () => {
+    const nombre = nombreEl.value.trim();
+    const tel = telefonoEl.value.trim();
+    const msg = mensajeEl.value.trim();
+    if (!nombre || !tel || !msg) {
+      return alert('Rellena nombre, teléfono y mensaje.');
+    }
+    previewEl.textContent = `Hola ${nombre},\n\n${msg}`;
+  });
+
+  fetchPlantillas();
+</script>
 
 </body>
 </html>

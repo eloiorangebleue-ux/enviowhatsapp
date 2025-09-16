@@ -9,13 +9,31 @@ const sendForm = document.getElementById('sendForm');
 const templateForm = document.getElementById('templateForm');
 const templateList = document.getElementById('templateList');
 
-let templates = [];
+// Plantillas por defecto
+let templates = [
+  { name: 'ENJOY', text: 'ENJOY' },
+  { name: 'ENJOY ESTUDIANTE', text: 'ENJOY ESTUDIANTE' },
+  { name: 'FREE', text: 'FREE' },
+  { name: 'FREE ESTUDIANTE', text: 'FREE ESTUDIANTE' },
+  { name: 'FLEX', text: 'FLEX' },
+  { name: 'FLEX ESTUDIANTE', text: 'FLEX ESTUDIANTE' },
+  { name: 'BAJA', text: 'BAJA' },
+  { name: '2 SEMANAS', text: '2 SEMANAS' },
+  { name: 'MUSCULACIÓN', text: 'MUSCULACIÓN' },
+  { name: 'CLASES DIRIGIDAS', text: 'CLASES DIRIGIDAS' },
+  { name: 'SIN ASISTENCIA', text: 'SIN ASISTENCIA' },
+  { name: 'INFORMACION', text: 'INFORMACION' },
+  { name: 'ENTRENAMIENTO DE PRUEBA', text: 'ENTRENAMIENTO DE PRUEBA' },
+  { name: 'PREINSCRIPCIÓN', text: 'PREINSCRIPCIÓN' },
+  { name: 'DEUDA', text: 'DEUDA' },
+  { name: 'FORMULARIO NUTRICIÓN', text: 'FORMULARIO NUTRICIÓN' }
+];
 
-// Cambiar pestañas
+// Función para cambiar pestañas
 tabs.forEach(tab => {
   tab.addEventListener('click', () => {
-    tabs.forEach(t=>t.classList.remove('active'));
-    contents.forEach(c=>c.classList.remove('active'));
+    tabs.forEach(t => t.classList.remove('active'));
+    contents.forEach(c => c.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById(tab.dataset.tab).classList.add('active');
   });
@@ -92,8 +110,12 @@ previewBtn.addEventListener('click', () => {
 // Envío de formulario (ejemplo de acción)
 sendForm.addEventListener('submit', e => {
   e.preventDefault();
-  // Lógica de integración con API de WhatsApp aquí
+  // Aquí coloca la integración con la API de WhatsApp
   alert('Mensaje enviado correctamente');
   sendForm.reset();
   previewBox.classList.add('hidden');
 });
+
+// Inicialización al cargar la página
+updateTemplateOptions();
+renderTemplateList();
